@@ -1,7 +1,7 @@
 var fs = require('fs');
 var zlib = require('zlib');
 
-var Restore = require('./lib/main').Restore;
+var Restore = require('../lib/main').Restore;
 
 var table = process.argv[2];
 
