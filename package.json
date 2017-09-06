@@ -1,0 +1,40 @@
+{
+  "name": "dynamo-streams",
+  "version": "0.1.0",
+  "main": "lib/main.js",
+  "description": "Backup / Restore DynamoDB node.js streams",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 6"
+  },
+  "dependencies": {
+    "aws-sdk": "= 2.106.0"
+  },
+  "devDependencies": {
+    "mocha": "= 3.5.0",
+    "chai": "= 4.1.1",
+    "js-beautify": "= 1.6.14",
+    "find": "= 0.2.7",
+    "jshint": "= 2.9.5",
+    "rimraf": "= 2.6.1"
+  },
+  "homepage": "https://github.com/SaltwaterC/dynamo-streams",
+  "author": {
+    "name": "Stefan Rusu",
+    "url": "http://www.saltwaterc.eu/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/SaltwaterC/dynamo-streams.git"
+  },
+  "keywords": [
+    "dynamo",
+    "dynamodb",
+    "aws",
+    "amazon",
+    "streams"
+  ],
+  "scripts": {
+    "test": "jake test"
+  }
+}
