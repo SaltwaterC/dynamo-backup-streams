@@ -17,3 +17,24 @@ var gzip = zlib.createGzip({
 var ws = fs.createWriteStream(table + '.json.gz');
 
 bs.pipe(gzip).pipe(ws);
+
+// outputs a lot less noise compared to listening for 'progress' events
+var progress = setInterval(function () {
+  var percent = 0;
+  if(bs.itemsCount > 0 && bs.itemsProcessed > 0) {
+    percent = bs.itemsProcessed / bs.itemsCount * 100;
+    if (percent > 100) {
+      percent = 100;
+    }
+
+    if (percent == 100) {
+      clearInterval(progress);
+    }
+  }
+
+  console.log(table + ' progress: %f%', percent);
+}, 1000);
+
+bs.on('end', function() {
+  clearInterval(progress);
+});
