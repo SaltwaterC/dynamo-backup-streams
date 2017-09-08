@@ -1,3 +1,5 @@
+'use strict';
+
 var fs = require('fs');
 var zlib = require('zlib');
 
@@ -7,7 +9,11 @@ var table = process.argv[2];
 
 var rs = fs.createReadStream(table + '.json.gz');
 var gunzip = zlib.createGunzip();
-var rss = new Restore({table: table, batchSize: 25, concurrency: 10});
+var rss = new Restore({
+  table: table,
+  batchSize: 25,
+  concurrency: 10
+});
 
 rs.pipe(gunzip).pipe(rss);
 
