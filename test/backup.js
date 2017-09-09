@@ -9,7 +9,8 @@ var table = process.argv[2];
 
 var bs = new Backup({
   table: table,
-  capacityPercentage: 100
+  capacityPercentage: 100,
+  concurrency: 2
 });
 var gzip = zlib.createGzip({
   level: 9
@@ -34,7 +35,7 @@ var progress = setInterval(function() {
     }
   }
 
-  console.log(table + ' progress: %f% - %d of %d; capacity %d - used: %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units.reduce(function(a, b) { return a + b; }, 0));
+  console.log(table + ' progress: %f% - %d of %d; capacity %d - used: %d / %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units.reduce(function(a, b) { return a + b; }, 0), bs.concurrency);
 }, 1000);
 
 bs.on('end', function() {
