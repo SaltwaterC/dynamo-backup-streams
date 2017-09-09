@@ -34,7 +34,7 @@ var progress = setInterval(function() {
     }
   }
 
-  console.log(table + ' progress: %f% - %d of %d; capacity %d - used %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units);
+  console.log(table + ' progress: %f% - %d of %d; capacity %d - used: %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units.reduce(function(a, b) { return a + b; }, 0));
 }, 1000);
 
 bs.on('end', function() {
