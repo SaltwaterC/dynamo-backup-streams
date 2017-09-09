@@ -9,15 +9,16 @@ var table = process.argv[2];
 
 var bs = new Backup({
   table: table,
-  capacityPercentage: 100,
-  delay: 900
+  capacityPercentage: 100
 });
 var gzip = zlib.createGzip({
   level: 9
 });
 var ws = fs.createWriteStream(table + '.json.gz');
+// var ws = fs.createWriteStream(table + '.json');
 
 bs.pipe(gzip).pipe(ws);
+// bs.pipe(ws);
 
 // outputs a lot less noise compared to listening for 'progress' events
 var progress = setInterval(function() {
