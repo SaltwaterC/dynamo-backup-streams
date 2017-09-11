@@ -11,8 +11,7 @@ var rs = fs.createReadStream(table + '.json.gz');
 var gunzip = zlib.createGunzip();
 var rss = new Restore({
   table: table,
-  capacityPercentage: 100,
-  concurrency: 1
+  capacityPercentage: 100
 });
 
 rs.pipe(gunzip).pipe(rss);
