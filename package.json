@@ -16,7 +16,8 @@
     "js-beautify": "= 1.6.14",
     "find": "= 0.2.7",
     "jshint": "= 2.9.5",
-    "rimraf": "= 2.6.1"
+    "rimraf": "= 2.6.1",
+    "progress-stream": "= 2.0.0"
   },
   "homepage": "https://github.com/SaltwaterC/dynamo-streams",
   "author": {

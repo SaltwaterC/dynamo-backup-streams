@@ -16,10 +16,8 @@ var gzip = zlib.createGzip({
   level: 9
 });
 var ws = fs.createWriteStream(table + '.json.gz');
-// var ws = fs.createWriteStream(table + '.json');
 
 bs.pipe(gzip).pipe(ws);
-// bs.pipe(ws);
 
 // outputs a lot less noise compared to listening for 'progress' events
 var progress = setInterval(function() {
@@ -35,7 +33,9 @@ var progress = setInterval(function() {
     }
   }
 
-  console.log(table + ' progress: %f% - %d of %d; capacity %d - used: %d / %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units.reduce(function(a, b) { return a + b; }, 0), bs.concurrency);
+  console.log(table + ' progress: %f% - %d of %d; capacity %d - used: %d / %d', percent, bs.itemsProcessed, bs.itemsCount, bs.limit, bs.units.reduce(function(a, b) {
+    return a + b;
+  }, 0), bs.concurrency);
 }, 1000);
 
 bs.on('end', function() {
