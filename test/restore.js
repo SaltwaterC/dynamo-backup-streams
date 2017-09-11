@@ -11,15 +11,14 @@ var rs = fs.createReadStream(table + '.json.gz');
 var gunzip = zlib.createGunzip();
 var rss = new Restore({
   table: table,
-  batchSize: 25,
-  concurrency: 10
+  capacityPercentage: 100,
+  concurrency: 1
 });
 
 rs.pipe(gunzip).pipe(rss);
 
 process.on('exit', function() {
   console.log();
-  console.log(rss.lines);
-  console.log(rss.processedLines);
-  console.log(rss.batch);
+  console.log('total lines: %d', rss.lines);
+  console.log('processed lines: %d', rss.processedLines);
 });
