@@ -8,8 +8,14 @@ var Restore = require('../lib/main').Restore;
 
 var table = process.argv[2];
 
+var rss = new Restore({
+  table: table,
+  capacityPercentage: 100,
+  concurrency: 2
+});
+
 fs.stat(table + '.json.gz', function(err, stat) {
-  if(err) {
+  if (err) {
     throw err;
   }
 
@@ -19,21 +25,19 @@ fs.stat(table + '.json.gz', function(err, stat) {
     time: 1000
   });
   var gunzip = zlib.createGunzip();
-  var rss = new Restore({
-    table: table,
-    capacityPercentage: 100
-  });
 
   rs.pipe(str).pipe(gunzip).pipe(rss);
 
   var progress = setInterval(function() {
     var stats = str.progress();
-    console.log(table + ' progress: %d / %d - %f%; read lines: %d - processed lines: %d; capacity: %d - used: %d', stats.transferred, stats.length, stats.percentage, rss.lines, rss.processedLines, rss.limit, rss.units);
-  }, 1000);
+    console.log(table + ' progress: %d / %d - %f%; read lines: %d - processed lines: %d; capacity: %d - used: %d / %d', stats.transferred, stats.length, stats.percentage, rss.lines, rss.processedLines, rss.limit, rss.units.reduce(function(a, b) {
+      return a + b;
+    }, 0), rss.concurrency);
 
-  rs.on('close', function() {
-    cleanInterval(progress);
-  });
+    if (rss.lines === rss.processedLines) {
+      clearInterval(progress);
+    }
+  }, 1000);
 });
 
 process.on('exit', function() {
