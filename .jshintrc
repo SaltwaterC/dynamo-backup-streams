@@ -13,5 +13,11 @@
 	"trailing": true,
 	"multistr": true,
 	"node": true,
-	"strict": true
+	"strict": true,
+	"globals": {
+		"describe": true,
+		"before": true,
+		"it": true,
+		"after": true
+	}
 }

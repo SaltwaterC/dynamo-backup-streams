@@ -1,7 +1,5 @@
 'use strict';
 
-/*global describe: true, before: true, it: true*/
-
 var crypto = require('crypto');
 var readline = require('readline');
 

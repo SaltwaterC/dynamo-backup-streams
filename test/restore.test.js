@@ -1,9 +1,6 @@
 'use strict';
 
-/*global describe: true, before: true, it: true*/
-
 var crypto = require('crypto');
-var readline = require('readline');
 var Readable = require('stream').Readable;
 
 var AWS = require('aws-sdk');
@@ -63,7 +60,7 @@ describe('DynamoDB Restore tests', function() {
 
         assert.strictEqual(data.Count, count, 'number of restored records');
 
-        for(idx in data.Items) {
+        for (idx in data.Items) {
           recIdx = data.Items[idx].primaryKey.N;
           assert.strictEqual(JSON.stringify(data.Items[idx]), JSON.stringify(records[recIdx]), 'record contents');
         }

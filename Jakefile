@@ -44,13 +44,11 @@ desc('Runs jshint');
 task('jshint', {
   async: true
 }, function() {
-  findFiles(['Jakefile'], ['js'], function(files) {
-    jake.exec('./node_modules/.bin/jshint ' + files.join(' '), {
-      printStdout: true,
-      printStderr: true
-    }, function() {
-      complete();
-    });
+  jake.exec('./node_modules/.bin/jshint . Jakefile', {
+    printStdout: true,
+    printStderr: true
+  }, function() {
+    complete();
   });
 });
 
@@ -59,7 +57,7 @@ task('mocha', {
   async: true
 }, function() {
   var cmds = [
-    './node_modules/.bin/mocha --reporter dot'
+    './node_modules/.bin/mocha'
   ];
 
   jake.exec(cmds, {
@@ -78,7 +76,7 @@ task('beautify', {
   async: true
 }, function() {
   findFiles(['Jakefile', 'package.json'], ['js', 'json'], function(files) {
-    jake.exec('./node_modules/.bin/js-beautify --end-with-newline --replace --indent-size 2 ' + files.join(' '), {
+    jake.exec('./node_modules/.bin/js-beautify ' + files.join(' '), {
       printStdout: true,
       printStderr: true
     }, function() {
