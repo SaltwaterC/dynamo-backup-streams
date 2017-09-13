@@ -1,7 +1,5 @@
 'use strict';
 
-/*global desc: true, task: true, jake: true, complete: true*/
-
 var findFiles = function(files, extensions, callback) {
   var find = require('find');
   var finished = 0,

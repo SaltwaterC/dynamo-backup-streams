@@ -18,6 +18,9 @@
 		"describe": true,
 		"before": true,
 		"it": true,
-		"after": true
+		"after": true,
+		"desc": true,
+		"task": true,
+		"complete": true
 	}
 }
