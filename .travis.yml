@@ -1,0 +1,8 @@
+before_install:
+  - npm -g install jake
+
+language: node_js
+
+node_js:
+  - 6
+  - 8
