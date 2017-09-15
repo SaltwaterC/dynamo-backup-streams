@@ -30,6 +30,11 @@ The Backup constructor accepts an options object. The spec for that object:
  * `retries` - the number of retries for each read request. Default: 10.
  * `delay` - the target delay in milliseconds between each request. Default: 1000.
  * `concurrency` - the number of workers to use for reading the data. Each worker reads a Scan segment. Default: 4.
+ * `region` - the AWS region. See `AWS Authentication` for details. Default: undefined.
+ * `accessKeyId` - the AWS AccessKeyId. See `AWS Authentication` for details. Default: undefined.
+ * `secretAccessKey` - the AWS SecretAccessKey. See `AWS Authentication` for details. Default: undefined.
+ * `sessionToken` - the AWS SessionToken. See `AWS Authentication` for details. Default: undefined.
+ * `profile` - the AWS credentials profile saved in ini files. See `AWS Authentication` for details. Default: undefined.
 
 The actual capacity requirements are calculated on each request. One read unit equals to 4KB/s of throughput. DynamoDB Scan counts the total size of the items for the purpose of capacity usage which makes this operation very efficient. On each request, the used capacity is compared against the target capacity of the worker. The target capacity is then adjusted accordingly. The total target capacity is checked against DynamoDB every 60 seconds to see if auto-scaling has kicked in. The target capacity of the worker is calculated by dividing the total target capacity to the number of workers and rounding down to the nearest integer unit. The read capacity per worker can't be smaller than 1.
 
@@ -66,9 +71,50 @@ The Restore constructor accepts an options object. The spec for that object:
  * `concurrency` - the number of workers to use for writing the data. Default: 1.
  * `bufferSize` - the size of the line buffer created by reading from readline. Default: 250 * `concurrency`.
  * `maxItems` - the maximum number of items in a batchWriteItem request. Default: 25. Max: 25.
+ * `region` - the AWS region. See `AWS Authentication` for details. Default: undefined.
+ * `accessKeyId` - the AWS AccessKeyId. See `AWS Authentication` for details. Default: undefined.
+ * `secretAccessKey` - the AWS SecretAccessKey. See `AWS Authentication` for details. Default: undefined.
+ * `sessionToken` - the AWS SessionToken. See `AWS Authentication` for details. Default: undefined.
+ * `profile` - the AWS credentials profile saved in ini files. See `AWS Authentication` for details. Default: undefined.
 
 The same formulas for capacity sizing and request timings used for the Backup stream apply. There are certain differences though. One write unit equals to 1KB/s of throughput. DynamoDB BatchWriteItem counts the size of each individual item and the value is rounded up to the nearest KB. This makes the capacity sizing tad inefficient compared to Scan. The general limits for BatchWriteItem apply: up to 25 items per batch, 400KB as the maximum size of the item, and 16MB as the total size of the BatchWriteItem request.
 
 If the lines buffer is full, readline is paused until the buffer size drops under the set limit. Because readline doesn't pause the stream immediately, i.e the in flight input Buffers may still trigger line events, the actual size of the line buffer may be higher, but not by much. By default, the capacity of this buffer is set dynamically. Each worker adds 250 units to the line buffer limit. Since the main limitation is the slow throughput of DynamoDB writes, this buffer would be pretty much full for the whole duration of the restore process.
 
 This stream emits the close event when the line buffer is drained and the readline stream is closed. This indicates that no more writes are being done to DynamoDB.
+
+## AWS Authentication
+
+By default, if no authentication options are being specified, aws-sdk tries to use the environment variables or the instance profile credentials (if running on EC2).
+
+The minimum environment variables required to make it work:
+
+ * `AWS_REGION`
+ * `AWS_ACCESS_KEY_ID`
+ * `AWS_SECRET_ACCESS_KEY`
+
+To use a credentials profile saved as ini files with environment variables:
+
+ * `AWS_REGION`
+ * `AWS_PROFILE`
+
+If the credentials are being specified as options of the Backup / Restore constructor, these take precedence over environment variables / instance profile.
+
+You need to specify all three to use the credentials passed to the constructor:
+
+ * `region`
+ * `accessKeyId`
+ * `secretAccessKey`
+
+`sessionToken` is optional. It must be specified if temporary credentials obtained from AWS STS are being used.
+
+If no credentials are being specified in the options object, it's possible to use a credentials profile without declaring this as environment variable. This has a lower precedence level compared to `region`, `accessKeyId`, and `secretAccessKey`.
+
+Pass the options:
+
+ * `region`
+ * `profile`
+
+The `region` option must be specified even when a default region is being declared in the ini for the profile.
+
+The`AWS.config` object isn't used to pass the credentials. All of them are being passed directly to the DynamoDB constructor which means multiple streams going to different regions using different credentials may be used in a single process if the appropriate credentials are being specified in the Backup / Restore constructor.
