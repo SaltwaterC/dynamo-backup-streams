@@ -8,6 +8,4 @@ test
 .jshintignore
 .jshintrc
 .travis.yml
-CHANGELOG.md
 Jakefile
-README.md
