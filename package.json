@@ -19,14 +19,14 @@
     "rimraf": "= 2.6.1",
     "progress-stream": "= 2.0.0"
   },
-  "homepage": "https://github.com/SaltwaterC/dynamo-streams",
+  "homepage": "https://github.com/SaltwaterC/dynamo-backup-streams",
   "author": {
     "name": "Stefan Rusu",
     "url": "http://www.saltwaterc.eu/"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/SaltwaterC/dynamo-streams.git"
+    "url": "git://github.com/SaltwaterC/dynamo-backup-streams.git"
   },
   "keywords": [
     "dynamo",
