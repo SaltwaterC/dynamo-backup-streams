@@ -50,6 +50,9 @@ task('jshint', {
   });
 });
 
+desc('Alias of jshint');
+task('lint', ['jshint']);
+
 desc('Runs mocha');
 task('mocha', {
   async: true
