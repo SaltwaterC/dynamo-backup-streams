@@ -1,0 +1,13 @@
+node_modules
+package-lock.json
+*.json.gz
+.DS_Store
+examples
+test
+.jsbeautifyrc
+.jshintignore
+.jshintrc
+.travis.yml
+CHANGELOG.md
+Jakefile
+README.md
