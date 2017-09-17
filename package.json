@@ -1,5 +1,5 @@
 {
-  "name": "dynamo-streams",
+  "name": "dynamo-backup-streams",
   "version": "0.1.0",
   "main": "lib/main.js",
   "description": "Backup / Restore DynamoDB node.js streams",

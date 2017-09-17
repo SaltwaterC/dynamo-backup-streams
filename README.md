@@ -1,4 +1,4 @@
-## About [![build status](https://secure.travis-ci.org/SaltwaterC/dynamo-streams.png?branch=master)](https://travis-ci.org/SaltwaterC/dynamo-streams)
+## About [![build status](https://secure.travis-ci.org/SaltwaterC/dynamo-backup-streams.png?branch=master)](https://travis-ci.org/SaltwaterC/dynamo-backup-streams)
 
 Backup / Restore DynamoDB node.js streams. Designed to be used in various pipelines in order to build custom backup / restore solutions. Both Backup and Restore handle properly few things, like back-pressure and capacity usage (including auto-scaling).
 
@@ -14,7 +14,7 @@ Implemented as node.js Readable stream. Built on top of DynamoDB Scan with Consi
 The backup.js example shows how a pipeline with Backup works. In this particular case, the Backup stream is piped into gzip, then piped into a file.
 
 ```javascript
-var Backup = require('dynamo-streams').Backup;
+var Backup = require('dynamo-backup-streams').Backup;
 var backupStream = new Backup({
   table: 'table_name'
 });
@@ -53,7 +53,7 @@ Implemented as node.js PassThrough stream. Built on top of DynamoDB BatchWriteIt
 The restore.js example shows how a pipeline with Restore works. In this particular case, a file read stream is piped into gunzip, then piped into the Restore stream.
 
 ```javascript
-var Restore = require('dynamo-streams').Restore;
+var Restore = require('dynamo-backup-streams').Restore;
 var restoreStream = new Restore({
   table: 'table_name'
 });
