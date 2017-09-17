@@ -1,4 +1,4 @@
-## About [![build status](https://secure.travis-ci.org/SaltwaterC/dynamo-backup-streams.png?branch=master)](https://travis-ci.org/SaltwaterC/dynamo-backup-streams)
+## About [![build status](https://secure.travis-ci.org/SaltwaterC/dynamo-backup-streams.png?branch=master)](https://travis-ci.org/SaltwaterC/dynamo-backup-streams) [![NPM version](https://badge.fury.io/js/dynamo-backup-streams.png)](http://badge.fury.io/js/dynamo-backup-streams)
 
 Backup / Restore DynamoDB node.js streams. Designed to be used in various pipelines in order to build custom backup / restore solutions. Both Backup and Restore handle properly few things, like back-pressure and capacity usage (including auto-scaling).
 
