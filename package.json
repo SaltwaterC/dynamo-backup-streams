@@ -1,16 +1,14 @@
 {
   "name": "dynamo-backup-streams",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "lib/main.js",
   "description": "Backup / Restore DynamoDB node.js streams",
   "license": "MIT",
   "engines": {
     "node": ">= 6"
   },
-  "dependencies": {
-    "aws-sdk": "= 2.106.0"
-  },
   "devDependencies": {
+    "aws-sdk": "= 2.106.0",
     "mocha": "= 3.5.0",
     "chai": "= 4.1.1",
     "js-beautify": "= 1.6.14",

@@ -5,7 +5,8 @@ Backup / Restore DynamoDB node.js streams. Designed to be used in various pipeli
 ## System requirements
 
  * node.js 6+
- * [aws-sdk](https://github.com/aws/aws-sdk-js) 2.106.0
+
+`aws-sdk` must be installed before using this library. A DynamoDB client instance must be passed to the Backup / Restore constructor.
 
 ## Backup
 
@@ -14,8 +15,10 @@ Implemented as node.js Readable stream. Built on top of DynamoDB Scan with Consi
 The backup.js example shows how a pipeline with Backup works. In this particular case, the Backup stream is piped into gzip, then piped into a file.
 
 ```javascript
+var AWS = require('aws-sdk');
 var Backup = require('dynamo-backup-streams').Backup;
 var backupStream = new Backup({
+  client: new AWS.DynamoDB(),
   table: 'table_name'
 });
 
@@ -25,16 +28,12 @@ backupStream.pipe(outputStream); // do stuff with the stream
 
 The Backup constructor accepts an options object. The spec for that object:
 
+ * `client` - DynamoDB client instance created with `new AWS.DynamoDB()`
  * `table` - indicates the DynamoDB table name to backup. This is the only compulsory option.
  * `capacityPercentage` - the percentage of the read capacity units to use on DynamoDB to be used as the total target capacity. Default: 25.
  * `retries` - the number of retries for each read request. Default: 10.
  * `delay` - the target delay in milliseconds between each request. Default: 1000.
  * `concurrency` - the number of workers to use for reading the data. Each worker reads a Scan segment. Default: 4.
- * `region` - the AWS region. See `AWS Authentication` for details. Default: undefined.
- * `accessKeyId` - the AWS AccessKeyId. See `AWS Authentication` for details. Default: undefined.
- * `secretAccessKey` - the AWS SecretAccessKey. See `AWS Authentication` for details. Default: undefined.
- * `sessionToken` - the AWS SessionToken. See `AWS Authentication` for details. Default: undefined.
- * `profile` - the AWS credentials profile saved in ini files. See `AWS Authentication` for details. Default: undefined.
 
 The actual capacity requirements are calculated on each request. One read unit equals to 4KB/s of throughput. DynamoDB Scan counts the total size of the items for the purpose of capacity usage which makes this operation very efficient. On each request, the used capacity is compared against the target capacity of the worker. The target capacity is then adjusted accordingly. The total target capacity is checked against DynamoDB every 60 seconds to see if auto-scaling has kicked in. The target capacity of the worker is calculated by dividing the total target capacity to the number of workers and rounding down to the nearest integer unit. The read capacity per worker can't be smaller than 1.
 
@@ -53,8 +52,10 @@ Implemented as node.js PassThrough stream. Built on top of DynamoDB BatchWriteIt
 The restore.js example shows how a pipeline with Restore works. In this particular case, a file read stream is piped into gunzip, then piped into the Restore stream.
 
 ```javascript
+var AWS = require('aws-sdk');
 var Restore = require('dynamo-backup-streams').Restore;
 var restoreStream = new Restore({
+  client: new AWS.DynamoDB(),
   table: 'table_name'
 });
 
@@ -64,6 +65,7 @@ inputStream.pipe(restoreStream);
 
 The Restore constructor accepts an options object. The spec for that object:
 
+ * `client` - DynamoDB client instance created with `new AWS.DynamoDB()`
  * `table` - indicates the DynamoDB table name to backup. This is the only compulsory option.
  * `capacityPercentage` - the percentage of write capacity units to use on DynamoDB to be used as the total target capacity. Default: 25.
  * `retries` - the number of retries for each write request. Default: 10.
@@ -71,11 +73,6 @@ The Restore constructor accepts an options object. The spec for that object:
  * `concurrency` - the number of workers to use for writing the data. Default: 1.
  * `bufferSize` - the size of the line buffer created by reading from readline. Default: 250 * `concurrency`.
  * `maxItems` - the maximum number of items in a batchWriteItem request. Default: 25. Max: 25.
- * `region` - the AWS region. See `AWS Authentication` for details. Default: undefined.
- * `accessKeyId` - the AWS AccessKeyId. See `AWS Authentication` for details. Default: undefined.
- * `secretAccessKey` - the AWS SecretAccessKey. See `AWS Authentication` for details. Default: undefined.
- * `sessionToken` - the AWS SessionToken. See `AWS Authentication` for details. Default: undefined.
- * `profile` - the AWS credentials profile saved in ini files. See `AWS Authentication` for details. Default: undefined.
 
 The same formulas for capacity sizing and request timings used for the Backup stream apply. There are certain differences though. One write unit equals to 1KB/s of throughput. DynamoDB BatchWriteItem counts the size of each individual item and the value is rounded up to the nearest KB. This makes the capacity sizing tad inefficient compared to Scan. The general limits for BatchWriteItem apply: up to 25 items per batch, 400KB as the maximum size of the item, and 16MB as the total size of the BatchWriteItem request.
 
@@ -98,23 +95,12 @@ To use a credentials profile saved as ini files with environment variables:
  * `AWS_REGION`
  * `AWS_PROFILE`
 
-If the credentials are being specified as options of the Backup / Restore constructor, these take precedence over environment variables / instance profile.
+To specify in code a credentials profile:
 
-You need to specify all three to use the credentials passed to the constructor:
-
- * `region`
- * `accessKeyId`
- * `secretAccessKey`
-
-`sessionToken` is optional. It must be specified if temporary credentials obtained from AWS STS are being used.
-
-If no credentials are being specified in the options object, it's possible to use a credentials profile without declaring this as environment variable. This has a lower precedence level compared to `region`, `accessKeyId`, and `secretAccessKey`.
-
-Pass the options:
-
- * `region`
- * `profile`
-
-The `region` option must be specified even when a default region is being declared in the ini for the profile.
-
-The`AWS.config` object isn't used to pass the credentials. All of them are being passed directly to the DynamoDB constructor which means multiple streams going to different regions using different credentials may be used in a single process if the appropriate credentials are being specified in the Backup / Restore constructor.
+```javascript
+new AWS.DynamoDB({
+  credentials: new AWS.SharedIniFileCredentials({
+    profile: 'profile_name'
+  })
+});
+```

@@ -51,6 +51,7 @@ describe('DynamoDB Backup tests', function() {
       var lineCount = 0;
 
       var backup = new Backup({
+        client: ddb,
         table: process.env.BACKUP_TABLE,
         concurrency: 1,
         capacityPercentage: 2500

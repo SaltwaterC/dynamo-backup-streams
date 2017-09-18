@@ -3,11 +3,13 @@
 var fs = require('fs');
 var zlib = require('zlib');
 
+var AWS = require('aws-sdk');
 var Backup = require('../lib/main').Backup;
 
 var table = process.argv[2];
 
 var bs = new Backup({
+  client: new AWS.DynamoDB(),
   table: table,
   capacityPercentage: 100,
   concurrency: 2

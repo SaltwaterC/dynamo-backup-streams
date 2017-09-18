@@ -4,11 +4,13 @@ var fs = require('fs');
 var zlib = require('zlib');
 var ps = require('progress-stream');
 
+var AWS = require('aws-sdk');
 var Restore = require('../lib/main').Restore;
 
 var table = process.argv[2];
 
 var rss = new Restore({
+  client: new AWS.DynamoDB(),
   table: table,
   capacityPercentage: 100,
   concurrency: 2

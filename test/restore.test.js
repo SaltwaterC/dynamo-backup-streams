@@ -18,6 +18,7 @@ describe('DynamoDB Restore tests', function() {
 
     var stream = new Readable();
     var restore = new Restore({
+      client: ddb,
       table: process.env.RESTORE_TABLE,
       capacityPercentage: 2500
     });
