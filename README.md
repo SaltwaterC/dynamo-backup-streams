@@ -104,3 +104,11 @@ new AWS.DynamoDB({
   })
 });
 ```
+
+## Screenshots
+
+These screenshots display the capacity usage for a large table backup with auto-scaling turned on.
+
+![large-table-1h.png](/screenshots/large-table-1h.png?raw=true "large-table-1h.png")
+
+![large-table-3h.png](/screenshots/large-table-3h.png?raw=true "large-table-3h.png")
