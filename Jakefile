@@ -76,7 +76,7 @@ desc('Runs js-beautify');
 task('beautify', {
   async: true
 }, function() {
-  findFiles(['Jakefile', 'package.json', 'examples/*.js'], ['js', 'json'], function(files) {
+  findFiles(['Jakefile', 'package.json', 'examples/*.js', '.jshintrc', '.jsbeautifyrc'], ['js', 'json'], function(files) {
     jake.exec('./node_modules/.bin/js-beautify ' + files.join(' '), {
       printStdout: true,
       printStderr: true
