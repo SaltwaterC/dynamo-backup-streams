@@ -12,6 +12,8 @@ describe('DynamoDB Restore tests', function() {
   var count = process.env.RESTORE_RECORDS | 0 || 3;
   var records = [],
     ddb = new AWS.DynamoDB();
+  var nodeMajor = process.versions.node.split('.')[0];
+  var table = process.env.RESTORE_TABLE + nodeMajor;
 
   before(function(done) {
     var idx, payload, record;
@@ -19,12 +21,9 @@ describe('DynamoDB Restore tests', function() {
     var stream = new Readable();
     var restore = new Restore({
       client: ddb,
-      table: process.env.RESTORE_TABLE,
+      table: table,
       capacityPercentage: 2500
     });
-
-    idx = process.versions.node.split('.')[0] * 10;
-    count += idx;
 
     for (idx = 0; idx < count; idx++) {
       payload = Date.now().toString() + idx;
@@ -55,7 +54,7 @@ describe('DynamoDB Restore tests', function() {
   describe('restore table', function() {
     it('is expectedo to verify successfully the restore', function(done) {
       ddb.scan({
-        TableName: process.env.RESTORE_TABLE,
+        TableName: table,
         ConsistentRead: true
       }, function(err, data) {
         var idx, recIdx;

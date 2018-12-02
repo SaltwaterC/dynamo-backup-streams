@@ -12,12 +12,11 @@ describe('DynamoDB Backup tests', function() {
   var count = process.env.BACKUP_RECORDS | 0 || 3;
   var records = [],
     ddb = new AWS.DynamoDB();
+  var nodeMajor = process.versions.node.split('.')[0];
+  var table = process.env.BACKUP_TABLE + nodeMajor;
 
   before(function(done) {
     var idx, payload, record, putItems = [];
-
-    idx = process.versions.node.split('.')[0] * 10;
-    count += idx;
 
     for (idx = 0; idx < count; idx++) {
       payload = Date.now().toString() + idx;
@@ -41,7 +40,7 @@ describe('DynamoDB Backup tests', function() {
     var reqItems = {
       RequestItems: {}
     };
-    reqItems.RequestItems[process.env.BACKUP_TABLE] = putItems;
+    reqItems.RequestItems[table] = putItems;
 
     ddb.batchWriteItem(reqItems, function(err) {
       assert.ifError(err, 'DynamoDB fails to write items');
@@ -55,7 +54,7 @@ describe('DynamoDB Backup tests', function() {
 
       var backup = new Backup({
         client: ddb,
-        table: process.env.BACKUP_TABLE,
+        table: table,
         concurrency: 1,
         capacityPercentage: 2500
       });
