@@ -17,7 +17,7 @@ describe('DynamoDB Backup tests', function() {
     var idx, payload, record, putItems = [];
 
     idx = process.versions.node.split('.')[0] * 10;
-    count += idx
+    count += idx;
 
     for (idx = 0; idx < count; idx++) {
       payload = Date.now().toString() + idx;
