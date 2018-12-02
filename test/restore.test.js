@@ -23,6 +23,9 @@ describe('DynamoDB Restore tests', function() {
       capacityPercentage: 2500
     });
 
+    idx = process.versions.node.split('.')[0] * 10;
+    count += idx
+
     for (idx = 0; idx < count; idx++) {
       payload = Date.now().toString() + idx;
 
