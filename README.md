@@ -34,6 +34,9 @@ The Backup constructor accepts an options object. The spec for that object:
  * `retries` - the number of retries for each read request. Default: 10.
  * `delay` - the target delay in milliseconds between each request. Default: 1000.
  * `concurrency` - the number of workers to use for reading the data. Each worker reads a Scan segment. Default: 4.
+ * `onDemand` - boolean to indicate [on demand](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand
+)
+ mode sets the capacity to [40.000](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#default-limits-throughput). Default false
 
 The actual capacity requirements are calculated on each request. One read unit equals to 4KB/s of throughput. DynamoDB Scan counts the total size of the items for the purpose of capacity usage which makes this operation very efficient. On each request, the used capacity is compared against the target capacity of the worker. The target capacity is then adjusted accordingly. The total target capacity is checked against DynamoDB every 60 seconds to see if auto-scaling has kicked in. The target capacity of the worker is calculated by dividing the total target capacity to the number of workers and rounding down to the nearest integer unit. The read capacity per worker can't be smaller than 1.
 
