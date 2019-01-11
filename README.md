@@ -76,6 +76,9 @@ The Restore constructor accepts an options object. The spec for that object:
  * `concurrency` - the number of workers to use for writing the data. Default: 1.
  * `bufferSize` - the size of the line buffer created by reading from readline. Default: 250 * `concurrency`.
  * `maxItems` - the maximum number of items in a batchWriteItem request. Default: 25. Max: 25.
+ * `fixedCapacity` - Number to operate on a fixed capacity e.g. needed to utilize tables in [on demand mode](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.ReadWriteCapacityMode.html#HowItWorks.OnDemand
+).
+ Make sure to consult the [available throughput in your region](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html#default-limits-throughput). Default undefined
 
 The same formulas for capacity sizing and request timings used for the Backup stream apply. There are certain differences though. One write unit equals to 1KB/s of throughput. DynamoDB BatchWriteItem counts the size of each individual item and the value is rounded up to the nearest KB. This makes the capacity sizing tad inefficient compared to Scan. The general limits for BatchWriteItem apply: up to 25 items per batch, 400KB as the maximum size of the item, and 16MB as the total size of the BatchWriteItem request.
 
