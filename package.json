@@ -1,6 +1,6 @@
 {
   "name": "dynamo-backup-streams",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "lib/main.js",
   "description": "Backup / Restore DynamoDB node.js streams",
   "license": "MIT",
@@ -22,6 +22,15 @@
     "name": "Stefan Rusu",
     "url": "http://www.saltwaterc.eu/"
   },
+  "contributors": [{
+      "name": "Pat McClory",
+      "url": "https://github.com/pmcclory"
+    },
+    {
+      "name": "jverneuer",
+      "url": "https://github.com/jverneuer"
+    }
+  ]
   "repository": {
     "type": "git",
     "url": "git://github.com/SaltwaterC/dynamo-backup-streams.git"
